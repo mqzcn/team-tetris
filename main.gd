@@ -1,7 +1,10 @@
 extends Node
 
 @export var mob_scene: PackedScene
+@export var bullet_scene: PackedScene
+
 var score
+var bullet_cooldown = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -63,3 +66,24 @@ func _on_score_timer_timeout():
 func _on_start_timer_timeout():
 	$MobTimer.start()
 	$ScoreTimer.start()
+
+
+func _on_player_fire():
+	if bullet_cooldown:
+			return
+	bullet_cooldown = true
+	$BulletTimer.start()
+	var bullet = bullet_scene.instantiate()
+	bullet.position = $Player.position
+	bullet.position.y -= 20
+	bullet.bullet_hit.connect(_on_bullet_hit)
+	add_child(bullet)
+
+func _on_bullet_hit(mob):
+	mob.hide()
+	score += 5
+	#$HUD.update_score(score)
+
+
+func _on_bullet_timer_timeout():
+	bullet_cooldown = false

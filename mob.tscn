@@ -48,12 +48,12 @@ animations = [{
 radius = 40.0
 height = 82.0
 
-[node name="Mob" type="RigidBody2D" groups=["mobs"]]
-collision_mask = 0
+[node name="Mob" type="RigidBody2D"]
+collision_layer = 3
 gravity_scale = 0.0
 script = ExtResource("1_6kf0o")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." groups=["mobs"]]
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_7byak")
 animation = &"fly"

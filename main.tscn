@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=4 uid="uid://xn4ooilf7hq0"]
+[gd_scene load_steps=10 format=4 uid="uid://xn4ooilf7hq0"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_o1431"]
 [ext_resource type="PackedScene" uid="uid://b587b5lyamn52" path="res://player.tscn" id="2_2ca47"]
 [ext_resource type="PackedScene" uid="uid://dwsww67h3ahpw" path="res://mob.tscn" id="2_ssnbv"]
 [ext_resource type="PackedScene" uid="uid://e8sqxeohj3pk" path="res://hud.tscn" id="4_wkx48"]
+[ext_resource type="PackedScene" uid="uid://d3w0jjcfn1dxd" path="res://bullet.tscn" id="6_7dd0l"]
 [ext_resource type="AudioStream" uid="uid://q3rce7u1ikd5" path="res://art/gameover.wav" id="6_mvwos"]
 
 [sub_resource type="Curve2D" id="Curve2D_sjfsv"]
@@ -24,6 +25,7 @@ loop = true
 [node name="Main" type="Node"]
 script = ExtResource("1_o1431")
 mob_scene = ExtResource("2_ssnbv")
+bullet_scene = ExtResource("6_7dd0l")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15
@@ -34,6 +36,8 @@ grow_vertical = 2
 color = Color(0.172549, 0, 0.333333, 1)
 
 [node name="Player" parent="." instance=ExtResource("2_2ca47")]
+
+[node name="Bullet" parent="." instance=ExtResource("6_7dd0l")]
 
 [node name="MobTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -60,8 +64,14 @@ stream = SubResource("AudioStreamOggVorbis_jfqrg")
 [node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_mvwos")
 
+[node name="BulletTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
+[connection signal="fire" from="Player" to="." method="_on_player_fire"]
 [connection signal="hit" from="Player" to="." method="game_over"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]
 [connection signal="timeout" from="ScoreTimer" to="." method="_on_score_timer_timeout"]
 [connection signal="timeout" from="StartTimer" to="." method="_on_start_timer_timeout"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]
+[connection signal="timeout" from="BulletTimer" to="." method="_on_bullet_timer_timeout"]
